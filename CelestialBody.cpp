@@ -26,8 +26,8 @@ void CelestialBody::render() const
 {
 	glPushMatrix();
 	glTranslatef(position.x, position.y, 0.0f);
-	glScalef(radius, radius, radius);
-	glutWireSphere(1.0, 16, 16);
+	//glScalef(radius, radius, radius);
+	glutWireSphere(radius, 16, 16);
 	glPopMatrix();
 }
 

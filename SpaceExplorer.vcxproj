@@ -60,12 +60,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="3dsloader.cpp" />
     <ClCompile Include="CelestialBody.cpp" />
     <ClCompile Include="sexplorer.cpp" />
+    <ClCompile Include="texture.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="3dsloader.h" />
     <ClInclude Include="CelestialBody.h" />
+    <ClInclude Include="texture.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
