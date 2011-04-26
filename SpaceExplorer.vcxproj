@@ -60,16 +60,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="3dsloader.cpp" />
+    <ClCompile Include="..\..\..\..\New folder\spacesimulator.net_tutorial6_win_vc6\load_3ds.cpp" />
+    <ClCompile Include="..\..\..\..\New folder\spacesimulator.net_tutorial6_win_vc6\load_bmp.cpp" />
+    <ClCompile Include="..\..\..\..\New folder\spacesimulator.net_tutorial6_win_vc6\mat_matr.cpp" />
+    <ClCompile Include="..\..\..\..\New folder\spacesimulator.net_tutorial6_win_vc6\mat_vect.cpp" />
+    <ClCompile Include="..\..\..\..\New folder\spacesimulator.net_tutorial6_win_vc6\object.cpp" />
     <ClCompile Include="CelestialBody.cpp" />
     <ClCompile Include="sexplorer.cpp" />
-    <ClCompile Include="texture.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="3dsloader.h" />
+    <ClInclude Include="..\..\..\..\New folder\spacesimulator.net_tutorial6_win_vc6\load_3ds.h" />
+    <ClInclude Include="..\..\..\..\New folder\spacesimulator.net_tutorial6_win_vc6\load_bmp.h" />
+    <ClInclude Include="..\..\..\..\New folder\spacesimulator.net_tutorial6_win_vc6\mat_matr.h" />
+    <ClInclude Include="..\..\..\..\New folder\spacesimulator.net_tutorial6_win_vc6\mat_vect.h" />
+    <ClInclude Include="..\..\..\..\New folder\spacesimulator.net_tutorial6_win_vc6\object.h" />
     <ClInclude Include="CelestialBody.h" />
-    <ClInclude Include="texture.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
