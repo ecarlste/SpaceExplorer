@@ -66,7 +66,7 @@
     <ClCompile Include="..\..\..\..\New folder\spacesimulator.net_tutorial6_win_vc6\mat_vect.cpp" />
     <ClCompile Include="..\..\..\..\New folder\spacesimulator.net_tutorial6_win_vc6\object.cpp" />
     <ClCompile Include="CelestialBody.cpp" />
-    <ClCompile Include="sexplorer.cpp" />
+    <ClCompile Include="spaceexplorer.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
