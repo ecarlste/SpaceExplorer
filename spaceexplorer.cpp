@@ -14,11 +14,6 @@
 CelestialBody planetEarth;
 int frameCount = 0;
 
-// Absolute rotation values (0-359 degrees) and rotation increments for each frame
-double rotation_x=0, rotation_x_increment=0.1;
-double rotation_y=0, rotation_y_increment=0.05;
-double rotation_z=0, rotation_z_increment=0.03;
-
 //ADDED
 int filling=1; //0=OFF 1=ON
 
@@ -26,11 +21,31 @@ int filling=1; //0=OFF 1=ON
 //obj_type object;
 //Lights settings
 GLfloat light_ambient[]= { 0.1f, 0.1f, 0.1f, 0.1f };
-GLfloat light_diffuse[]= { 1.0f, 1.0f, 1.0f, 0.0f };
-GLfloat light_specular[]= { 1.0f, 1.0f, 1.0f, 0.0f };
-GLfloat light_position[]= { 100.0f, 0.0f, -10.0f, 1.0f };
+GLfloat light_diffuse[]= { 0.3f, 0.2f, 0.3f, 0.0f };
+GLfloat light_specular[]= { 0.3f, 0.3f, 0.3f, 0.0f };
+GLfloat light_position[]= { 0.0f, 0.0f, 100.0f, 1.0f };
 
-//Materials settings
+//Materials Color Settings
+//Green
+GLfloat mat_ambient_green[]= { 0.1f, 0.8f, 0.3f, 0.1f };
+GLfloat mat_diffuse_green[]= { 1.0f, 1.0f, 1.0f, 0.0f };
+GLfloat mat_specular_green[]= { 0.2f, 0.2f, 0.2f, 0.0f };
+//shrub easy Green
+GLfloat mat_ambient_grn[]= { 0.1f, 1.0f, 0.4f, 0.1f };
+GLfloat mat_diffuse_grn[]= { 0.7f, 0.8f, 0.7f, 0.0f };
+GLfloat mat_specular_grn[]= { 0.2f, 0.2f, 0.2f, 0.0f };
+
+//Red
+GLfloat mat_ambient_red[]= { 0.9f, 0.1f, 0.2f, 0.0f };
+GLfloat mat_diffuse_red[]= { 1.0f, 0.0f, 0.0f, 0.0f };
+GLfloat mat_specular_red[]= { 0.2f, 0.2f, 0.2f, 0.0f };
+
+//Blue
+GLfloat mat_ambient_blue[]= { 0.1f, 0.2f, 0.8f, 0.1f };
+GLfloat mat_diffuse_blue[]= { 1.0f, 1.0f, 1.0f, 0.0f };
+GLfloat mat_specular_blue[]= { 0.2f, 0.2f, 0.2f, 0.0f };
+
+//Gray
 GLfloat mat_ambient[]= { 0.1f, 0.1f, 0.1f, 0.0f };
 GLfloat mat_diffuse[]= { 1.0f, 1.0f, 1.0f, 0.0f };
 GLfloat mat_specular[]= { 0.2f, 0.2f, 0.2f, 0.0f };
@@ -54,8 +69,7 @@ void init()
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-    gluPerspective(45.0f, (GLdouble)SCREEN_WIDTH/(GLdouble)SCREEN_HEIGHT, 0.1, 6063120000.0);
-	//gluPerspective(45.0f,(GLfloat)screen_width/(GLfloat)screen_height,5.0f,10000.0f);
+    gluPerspective(45.0f, (GLdouble)SCREEN_WIDTH/(GLdouble)SCREEN_HEIGHT, 0.0, 6063120000.0);
 
 	//Lights initialization and activation
     glLightfv (GL_LIGHT1, GL_AMBIENT, light_ambient);
@@ -81,26 +95,15 @@ void init()
 	glEnable(GL_CULL_FACE); // Enable the back face culling
     glEnable(GL_DEPTH_TEST); // Enable the depth test (also called z buffer)
 
-	//Objects loading
-	ObjLoad ("fighter1.3ds","skull.bmp",             -10.0, 0.0, -30.0,    900,0,0);
-	ObjLoad ("fighter2.3ds",'\0',                     10.0, 0.0, -30.0,    900,0,0);
-	ObjLoad ("fighter3.3ds","spaceshiptexture.bmp",    0.0, 0.0, -30.0,    900,0,0);
+	//Objects loading	
+	ObjLoad ("shrub.3DS",'\0',                        0.0, 0.0, 0.0,		0,0,0,     1.0, 1.0, 4.0);
+	ObjSetMaterial(&object[0],mat_ambient_grn, mat_diffuse_grn, mat_specular_grn, mat_shininess);
 
-   // Load3DS (object,"spaceship.3ds");
-	//Load3DS (object, "fighter1.3ds");
-	//object.id_texture=LoadBitmap("skull.bmp");
-
-    //object.id_texture=LoadBitmap("spaceshiptexture.bmp"); // The Function LoadBitmap() return the current texture ID
+	ObjLoad ("grass-block.3DS",'\0',                    0.0, 0.0, 0.0,     0,0,0,      1.0,1.0,1.0);
+	ObjSetMaterial(&object[1], mat_ambient_green, mat_diffuse_green, mat_specular_green, mat_shininess);
     
 	initSolarSystem();
 
-    // * Note * - The farthest distance should be at least 1 if you don't want some
-    // funny artifacts when dealing with lighting and distance polygons.  This is a special
-    // thing that not many people know about.  If it's less than 1 it creates little flashes
-    // on far away polygons when lighting is enabled.
-
-    //glMatrixMode(GL_MODELVIEW);                         // Select The Modelview Matrix
-    //glLoadIdentity();
 }
 
 
@@ -115,44 +118,6 @@ void renderSun()
 }
 
 
-//void renderShip()
-//{
-//	glBindTexture(GL_TEXTURE_2D, object.id_texture); // We set the active texture 
-//
-//    glBegin(GL_TRIANGLES); // glBegin and glEnd delimit the vertices that define a primitive (in our case triangles)
-//    for (int l_index=0;l_index<object.polygons_qty;l_index++)
-//    {
-//        //----------------- FIRST VERTEX -----------------
-//        // Texture coordinates of the first vertex
-//        glTexCoord2f( object.mapcoord[ object.polygon[l_index].a ].u,
-//                      object.mapcoord[ object.polygon[l_index].a ].v);
-//        // Coordinates of the first vertex
-//        glVertex3f( object.vertex[ object.polygon[l_index].a ].x,
-//                    object.vertex[ object.polygon[l_index].a ].y,
-//                    object.vertex[ object.polygon[l_index].a ].z); //Vertex definition
-//
-//        //----------------- SECOND VERTEX -----------------
-//        // Texture coordinates of the second vertex
-//        glTexCoord2f( object.mapcoord[ object.polygon[l_index].b ].u,
-//                      object.mapcoord[ object.polygon[l_index].b ].v);
-//        // Coordinates of the second vertex
-//        glVertex3f( object.vertex[ object.polygon[l_index].b ].x,
-//                    object.vertex[ object.polygon[l_index].b ].y,
-//                    object.vertex[ object.polygon[l_index].b ].z);
-//        
-//        //----------------- THIRD VERTEX -----------------
-//        // Texture coordinates of the third vertex
-//        glTexCoord2f( object.mapcoord[ object.polygon[l_index].c ].u,
-//                      object.mapcoord[ object.polygon[l_index].c ].v);
-//        // Coordinates of the Third vertex
-//        glVertex3f( object.vertex[ object.polygon[l_index].c ].x,
-//                    object.vertex[ object.polygon[l_index].c ].y,
-//                    object.vertex[ object.polygon[l_index].c ].z);
-//    }
-//    glEnd();
-//}
-
-
 void DrawString(std::string in)
 {
 	for (size_t i = 0; i < in.length(); i++)
@@ -161,28 +126,17 @@ void DrawString(std::string in)
 	}
 }
 
-void renderScene(void) {
+void renderObjects(void)
+{
 	int i,j;
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);   // Clear The Screen And The Depth Buffer
-    glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();                                   // Reset The View
-
-	/*glTranslatef(0.0f, 0.0f, -300.0f);
-
-	rotation_x = rotation_x + rotation_x_increment;
-    rotation_y = rotation_y + rotation_y_increment;
-    rotation_z = rotation_z + rotation_z_increment;
-
-    if (rotation_x > 359) rotation_x = 0;
-    if (rotation_y > 359) rotation_y = 0;
-    if (rotation_z > 359) rotation_z = 0;  */
-
-    //glRotatef(rotation_x,1.0,0.0,0.0); // Rotations of the object (the model matrix is multiplied by the rotation matrices)
-    //glRotatef(rotation_y,0.0,1.0,0.0);
-    //glRotatef(rotation_z,0.0,0.0,1.0);
 	
 	for (i=0;i<obj_qty;i++)
 	{
+		glMaterialfv(GL_FRONT, GL_AMBIENT,object[i].mat_ambient);
+		glMaterialfv(GL_FRONT, GL_DIFFUSE,object[i].mat_diffuse);
+		glMaterialfv(GL_FRONT, GL_SPECULAR,object[i].mat_specular);
+		glMaterialfv(GL_FRONT, GL_SHININESS,object[i].mat_shininess);
+
 		glPushMatrix(); // We save the current matrix
 	
 		glMultMatrixf(&object[i].matrix[0][0]); // Now let's multiply the object matrix by the identity-first matrix
@@ -194,6 +148,7 @@ void renderScene(void) {
 		}
 		else
 		    glDisable(GL_TEXTURE_2D); // Texture mapping OFF
+
 		glBegin(GL_TRIANGLES); // glBegin and glEnd delimit the vertices that define a primitive (in our case triangles)
 		for (j=0;j<object[i].polygons_qty;j++)
 		{
@@ -238,9 +193,162 @@ void renderScene(void) {
 		glEnd();
 		glPopMatrix(); // Restore the previous matrix 
 	}
+}
+//renderObject(int index)  
+//  
+void renderObject(int i)
+{
+		int j;
+		glMaterialfv(GL_FRONT, GL_AMBIENT,object[i].mat_ambient);
+		glMaterialfv(GL_FRONT, GL_DIFFUSE,object[i].mat_diffuse);
+		glMaterialfv(GL_FRONT, GL_SPECULAR,object[i].mat_specular);
+		glMaterialfv(GL_FRONT, GL_SHININESS,object[i].mat_shininess);
+
+		glPushMatrix(); // We save the current matrix
+	
+		glMultMatrixf(&object[i].matrix[0][0]); // Now let's multiply the object matrix by the identity-first matrix
+		
+		if (object[i].id_texture!=-1) 
+		{
+			glBindTexture(GL_TEXTURE_2D, object[i].id_texture); // We set the active texture 
+		    glEnable(GL_TEXTURE_2D); // Texture mapping ON
+		}
+		else
+		    glDisable(GL_TEXTURE_2D); // Texture mapping OFF
+
+		glBegin(GL_TRIANGLES); // glBegin and glEnd delimit the vertices that define a primitive (in our case triangles)
+		for (j=0;j<object[i].polygons_qty;j++)
+		{
+			//----------------- FIRST VERTEX -----------------
+			//Normal coordinates of the first vertex
+			glNormal3f( object[i].normal[ object[i].polygon[j].a ].x,
+						object[i].normal[ object[i].polygon[j].a ].y,
+						object[i].normal[ object[i].polygon[j].a ].z);
+			// Texture coordinates of the first vertex
+			glTexCoord2f( object[i].mapcoord[ object[i].polygon[j].a ].u,
+						  object[i].mapcoord[ object[i].polygon[j].a ].v);
+			// Coordinates of the first vertex
+			glVertex3f( object[i].vertex[ object[i].polygon[j].a ].x,
+						object[i].vertex[ object[i].polygon[j].a ].y,
+						object[i].vertex[ object[i].polygon[j].a ].z);
+			//----------------- SECOND VERTEX -----------------
+			//Normal coordinates of the second vertex
+			glNormal3f( object[i].normal[ object[i].polygon[j].b ].x,
+						object[i].normal[ object[i].polygon[j].b ].y,
+						object[i].normal[ object[i].polygon[j].b ].z);
+			// Texture coordinates of the second vertex
+			glTexCoord2f( object[i].mapcoord[ object[i].polygon[j].b ].u,
+						  object[i].mapcoord[ object[i].polygon[j].b ].v);
+			// Coordinates of the second vertex
+			glVertex3f( object[i].vertex[ object[i].polygon[j].b ].x,
+						object[i].vertex[ object[i].polygon[j].b ].y,
+						object[i].vertex[ object[i].polygon[j].b ].z);
+			//----------------- THIRD VERTEX -----------------
+			//Normal coordinates of the third vertex
+			glNormal3f( object[i].normal[ object[i].polygon[j].c ].x,
+						object[i].normal[ object[i].polygon[j].c ].y,
+						object[i].normal[ object[i].polygon[j].c ].z);
+			// Texture coordinates of the third vertex
+			glTexCoord2f( object[i].mapcoord[ object[i].polygon[j].c ].u,
+						  object[i].mapcoord[ object[i].polygon[j].c ].v);
+			// Coordinates of the Third vertex
+			glVertex3f( object[i].vertex[ object[i].polygon[j].c ].x,
+						object[i].vertex[ object[i].polygon[j].c ].y,
+						object[i].vertex[ object[i].polygon[j].c ].z);
+
+		}
+		glEnd();
+		glPopMatrix(); // Restore the previous matrix 
+	}
+
+//scale key
+void renderUnitCube()
+{
+	//Materials initialization and activation
+	glMaterialfv (GL_FRONT, GL_AMBIENT, mat_ambient_red);
+    glMaterialfv (GL_FRONT, GL_DIFFUSE, mat_diffuse_red);
+    glMaterialfv (GL_FRONT, GL_SPECULAR, mat_specular_red);
+	
+	//to make our unit cube = 1 meter:
+	glPushMatrix();
+	glTranslatef(0.0, 0.0, 0.002);
+	glScalef(.001, .001, .001);
+	
+	
+    glutSolidCube(1);
+	glPopMatrix();
+}
+
+//renderGrassField
+//	calls renderObject however many times
+void renderGrassField()
+{
+	int j,k;
+	float dx=23.0f;
+	float dy=23.0f;
+
+	for(k=-5;k<4;k++)
+	{
+		for(j=-7;j<5;j++)
+		{
+			glPushMatrix();
+			glTranslatef(k*dx, j*(-dy), 0.0f);
+			renderObject(1);
+			glPopMatrix();
+		}
+	}
+	
+}
+
+//renderShrubFence
+//	calls renderObject however many times
+void renderShrubFence()
+{
+	int j,k;
+	float dx=23.0f;
+	float dy=23.0f;
+	
+	/*glPushMatrix();
+	renderObject(0);
+	glPopMatrix();*/
+
+	//along y-direction
+	for(k=-6;k<9;k++)
+	{
+			glPushMatrix();
+			glTranslatef(5*dx, 0.75*k*dy, 0.3f);
+			renderObject(0);
+			glPopMatrix();		
+	}
+	//along x-direction
+	for(j=-10;j<12;j++)
+	{
+		glPushMatrix();
+		glTranslatef(0.45*j*dx, -5*dy, 0.0f);
+		renderObject(0);
+		glPopMatrix();
+	}
+	
+}
+
+void renderScene(void) {
+	
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);   // Clear The Screen And The Depth Buffer
+    glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();                                   // Reset The View
+
+	gluLookAt(-120.0, 250.0, 90.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+
+	//renderObjects();
+	renderGrassField();
+	renderUnitCube();
+	renderShrubFence();
+	
     glFlush(); // This forces the execution of OpenGL commands
     glutSwapBuffers(); // In double buffered mode we invert the positions of the visible buffer and the writing buffer
 }
+
+
 
 
 void main(int argc, char **argv) {

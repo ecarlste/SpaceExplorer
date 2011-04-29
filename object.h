@@ -20,8 +20,8 @@
 #include "mat_vect.h"
 #include "mat_matr.h"
 
-#define MAX_VERTICES 10000 // Max number of vertices (for each object)
-#define MAX_POLYGONS 10000 // Max number of polygons (for each object)
+#define MAX_VERTICES 100000 // Max number of vertices (for each object)
+#define MAX_POLYGONS 100000 // Max number of polygons (for each object)
 #define MAX_OBJECTS 100 // Max number of objects
 
 
@@ -60,6 +60,14 @@ typedef struct {
     polygon_type polygon[MAX_POLYGONS]; // Array of polygons (numbers that point to the vertices' list)
     mapcoord_type mapcoord[MAX_VERTICES]; // Array of U,V coordinates for texture mapping
 
+	//matdiffuse, mat
+	//Materials settings
+	float mat_ambient[4];//, 0.1f, 0.1f, 0.0f };
+	float mat_diffuse[4];//= { 1.0f, 1.0f, 1.0f, 0.0f };
+	float mat_specular[4];//= { 0.2f, 0.2f, 0.2f, 0.0f };
+	float mat_shininess[1];//= { 1.0f };
+
+
     int id_texture; // Number of the texture 
 
 	matrix_4x4_type matrix; // Object matrix
@@ -86,11 +94,14 @@ extern int obj_control;
  *
  *********************************************************/
 
-extern char ObjLoad(char *p_object_name, char *p_texture_name, float p_pos_x, float p_pos_y, float p_pos_z, int p_rot_x, int p_rot_y, int p_rot_z);
+extern char ObjLoad(char *p_object_name, char *p_texture_name, float p_pos_x, float p_pos_y, float p_pos_z, int p_rot_x, int p_rot_y, int p_rot_z, float scale_x, float scale_y, float scale_z);
 extern void ObjCalcNormals(obj_type_ptr p_object);
 extern void ObjPosition (obj_type_ptr p_object,float p_x,float p_y,float p_z);
 extern void ObjTranslate (obj_type_ptr p_object,float p_x,float p_y,float p_z);
 extern void ObjTranslateW (obj_type_ptr p_object,float p_x,float p_y,float p_z);
 extern void ObjRotate (obj_type_ptr p_object,int p_angle_x,int p_angle_y,int p_angle_z);
+extern void ObjScale(obj_type_ptr p_object, float s_x, float s_y, float s_z);
+
+extern void ObjSetMaterial(obj_type_ptr p_object, float *ambient, float *diffuse, float *specular, float *shininess);
 
 #endif

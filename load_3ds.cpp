@@ -65,10 +65,8 @@ char Load3DS(obj_type_ptr p_object, char *p_filename)
 		//getche(); //Insert this command for debug (to wait for keypress for each chuck reading)
 
 		fread (&l_chunk_id, 2, 1, l_file); //Read the chunk header
-		printf("ChunkID: %x\n",l_chunk_id); 
 		fread (&l_chunk_length, 4, 1, l_file); //Read the length of the chunk
-		printf("ChunkLength: %x\n",l_chunk_length);
-
+		
 		switch (l_chunk_id)
         {
 			//----------------- MAIN3DS -----------------
@@ -120,20 +118,16 @@ char Load3DS(obj_type_ptr p_object, char *p_filename)
 			case 0x4110: 
 				fread (&l_qty, sizeof (unsigned short), 1, l_file);
                 p_object->vertices_qty = l_qty;
-                printf("Number of vertices: %d\n",l_qty);
 				if (l_qty>MAX_VERTICES) 
 				{
-			        MessageBox(NULL,"Number of vertices too high","Spacesim",MB_OK | MB_ICONERROR);
+			        MessageBox(NULL,"Number of vertices too high","SpaceExplorer",MB_OK | MB_ICONERROR);
 					return (0);
 				}
                 for (i=0; i<l_qty; i++)
                 {
 					fread (&p_object->vertex[i].x, sizeof(float), 1, l_file);
- 					printf("Vertices list x: %f\n",p_object->vertex[i].x);
                     fread (&p_object->vertex[i].y, sizeof(float), 1, l_file);
- 					printf("Vertices list y: %f\n",p_object->vertex[i].y);
 					fread (&p_object->vertex[i].z, sizeof(float), 1, l_file);
- 					printf("Vertices list z: %f\n",p_object->vertex[i].z);
 				}
 				break;
 
@@ -147,22 +141,17 @@ char Load3DS(obj_type_ptr p_object, char *p_filename)
 			case 0x4120:
 				fread (&l_qty, sizeof (unsigned short), 1, l_file);
                 p_object->polygons_qty = l_qty;
-                printf("Number of polygons: %d\n",l_qty); 
 				if (l_qty>MAX_POLYGONS) 
 				{
-			        MessageBox(NULL,"Number of polygons too high","Spacesim",MB_OK | MB_ICONERROR);
+			        MessageBox(NULL,"Number of polygons too high","SpaceExplorer",MB_OK | MB_ICONERROR);
 					return (0);
 				}				
                 for (i=0; i<l_qty; i++)
                 {
 					fread (&p_object->polygon[i].a, sizeof (unsigned short), 1, l_file);
-					printf("Polygon point a: %d\n",p_object->polygon[i].a);
 					fread (&p_object->polygon[i].b, sizeof (unsigned short), 1, l_file);
-					printf("Polygon point b: %d\n",p_object->polygon[i].b);
 					fread (&p_object->polygon[i].c, sizeof (unsigned short), 1, l_file);
-					printf("Polygon point c: %d\n",p_object->polygon[i].c);
 					fread (&l_face_flags, sizeof (unsigned short), 1, l_file);
-					printf("Face flags: %x\n",l_face_flags);
 				}
                 break;
 
@@ -178,9 +167,7 @@ char Load3DS(obj_type_ptr p_object, char *p_filename)
 				for (i=0; i<l_qty; i++)
 				{
 					fread (&p_object->mapcoord[i].u, sizeof (float), 1, l_file);
-					printf("Mapping list u: %f\n",p_object->mapcoord[i].u);
                     fread (&p_object->mapcoord[i].v, sizeof (float), 1, l_file);
-					printf("Mapping list v: %f\n",p_object->mapcoord[i].v);
 				}
                 break;
 

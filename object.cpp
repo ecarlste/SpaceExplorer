@@ -50,7 +50,7 @@ int obj_control=0; //Number of the object that we can control
  *
  *********************************************************/
 
-char ObjLoad(char *p_object_name, char *p_texture_name, float p_pos_x, float p_pos_y, float p_pos_z, int p_rot_x, int p_rot_y, int p_rot_z)
+char ObjLoad(char *p_object_name, char *p_texture_name, float p_pos_x, float p_pos_y, float p_pos_z, int p_rot_x, int p_rot_y, int p_rot_z,float scale_x, float scale_y, float scale_z)
 {
     if (Load3DS (&object[obj_qty],p_object_name)==0) return(0); //Object loading
     object[obj_qty].id_texture=LoadBMP(p_texture_name); // The Function LoadBitmap() returns the current texture ID
@@ -58,10 +58,35 @@ char ObjLoad(char *p_object_name, char *p_texture_name, float p_pos_x, float p_p
 	MatrIdentity_4x4(object[obj_qty].matrix); //Object matrix init
 	ObjPosition(&object[obj_qty], p_pos_x, p_pos_y, p_pos_z); // Object initial position
 	ObjRotate(&object[obj_qty], p_rot_x, p_rot_y, p_rot_z); // Object initial rotation
+	ObjScale(&object[obj_qty],scale_x, scale_y, scale_z);   //make object bigger or smaller :)
 	obj_qty++; // Let's increase the object number and get ready to load another object!
 	return (1); // If all is ok then return 1
 }
 
+/***************************************************
+*
+	SUBROUTINE ObjScale(obj_type_ptr p_object)
+*
+	This function scales the specified object
+*
+	Input parameters: p_object = object
+*******************************************************/
+void ObjScale(obj_type_ptr p_object,float s_x,float s_y,float s_z)
+{
+	int j,k;
+    matrix_4x4_type l_matrix, l_res;
+
+    MatrIdentity_4x4(l_matrix);
+    l_matrix[0][0]=s_x;
+    l_matrix[1][1]=s_y;
+    l_matrix[2][2]=s_z;
+
+	//The object matrix is multiplied by a scalar matrix
+    MatrMul_4x4_4x4(l_matrix,p_object->matrix,l_res);
+    for(j=0;j<4;j++)
+      for(k=0;k<4;k++)
+        p_object->matrix[j][k]=l_res[j][k];
+}
 
 
 /**********************************************************
@@ -78,7 +103,7 @@ void ObjCalcNormals(obj_type_ptr p_object)
 {
 	int i;
 	p3d_type l_vect1,l_vect2,l_vect3,l_vect_b1,l_vect_b2,l_normal;  //Some local vectors
-	int l_connections_qty[MAX_VERTICES]; //Number of poligons around each vertex
+	int l_connections_qty[MAX_VERTICES]; //Number of polygons around each vertex
 
     // Resetting vertices' normals...
 	for (i=0; i<p_object->vertices_qty; i++)
@@ -271,4 +296,19 @@ void ObjRotate (obj_type_ptr p_object,int p_angle_x,int p_angle_y,int p_angle_z)
         MatrMul_4x4_4x4(l_matrix,p_object->matrix,l_res);
         MatrCopy_4x4(p_object->matrix,l_res);
     }
+
+
+}
+
+void ObjSetMaterial(obj_type_ptr p_object, float *ambient, float *diffuse, float *specular, float *shininess)
+{
+	int i;
+	for(i=0;i<4;i++)
+	{
+		p_object->mat_ambient[i] = ambient[i];
+		p_object->mat_diffuse[i] = diffuse[i];
+		p_object->mat_specular[i] = specular[i];
+		
+	}
+	p_object->mat_shininess[0] = shininess[0];
 }

@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{E209B863-61E2-40A7-8125-65DD41452D07}</ProjectGuid>
+    <ProjectGuid>{BAC7CA0C-0D96-4B08-A151-81D7DE09F259}</ProjectGuid>
     <RootNamespace>SpaceExplorer</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
