@@ -60,6 +60,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="load_3ds.cpp" />
     <ClCompile Include="load_bmp.cpp" />
     <ClCompile Include="mat_matr.cpp" />
@@ -70,12 +71,14 @@
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="load_3ds.h" />
     <ClInclude Include="load_bmp.h" />
     <ClInclude Include="mat_matr.h" />
     <ClInclude Include="mat_vect.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="CelestialBody.h" />
+    <ClInclude Include="spaceexplorer.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
